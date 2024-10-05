@@ -49,11 +49,11 @@ module lab3_tb;
     reset_btn = 0;
     push_btn = 0;
 
-    #100;
+    #1000;
     reset_btn = 1;
-    #100;
+    #1000;
     reset_btn = 0;
-    #1000;  // 等待复位结束
+    #10000;  // 等待复位结束
 
     // 样例：使用 POKE 指令为寄存器赋随机初值
     for (int i = 1; i < 32; i = i + 1) begin
@@ -69,7 +69,23 @@ module lab3_tb;
     end
 
     // TODO: 随机测试各种指令
+    // 随机测试 R-Type 指令
+    for (int i = 0; i < 20; i = i + 1) begin
+      #100;
+      rs1 = $urandom_range(1, 31);  // 随机选择源寄存器 rs1
+      rs2 = $urandom_range(1, 31);  // 随机选择源寄存器 rs2
+      rd = $urandom_range(1, 31);   // 随机选择目标寄存器 rd
+      opcode = $urandom_range(1, 10); // 随机选择操作码 ADD, SUB, AND, OR, etc.
+      
+      dip_sw = `inst_rtype(rd, rs1, rs2, opcode);
+      push_btn = 1;
 
+      #100;
+      push_btn = 0;
+
+      #1000;
+    end
+    
     #10000 $finish;
   end
 

@@ -106,8 +106,63 @@ module lab3_top (
   /* =========== Demo code end =========== */
 
   // TODO: 内部信号声明
+  logic [4:0] rf_raddr_a, rf_raddr_b, rf_waddr;
+  logic [15:0] rf_rdata_a, rf_rdata_b, rf_wdata;
+  logic rf_we;
+
+  logic [15:0] alu_a, alu_b, alu_y;
+  logic [3:0] alu_op;
+
+  logic trigger_pulse;
 
   // TODO: 实验模块例化
 
+  // 实例化按键触发模块
+  trigger u_trigger (
+      .clk(clk_10M),
+      .reset(reset_of_clk10M),
+      .btn(push_btn),
+      .trigger_pulse(trigger_pulse)
+  );
+
+  // 实例化寄存器堆模块
+  reg_file u_reg_file (
+      .clk(clk_10M),
+      .waddr(rf_waddr),
+      .wdata(rf_wdata),
+      .we(rf_we),
+      .raddr_a(rf_raddr_a),
+      .rdata_a(rf_rdata_a),
+      .raddr_b(rf_raddr_b),
+      .rdata_b(rf_rdata_b)
+  );
+
+  // 实例化 ALU 模块
+  alu u_alu (
+      .a(alu_a),
+      .b(alu_b),
+      .op(alu_op),
+      .y(alu_y)
+  );
+
+  // 实例化控制器模块
+  controller u_controller (
+      .clk(clk_10M),
+      .reset(reset_of_clk10M),
+      .rf_raddr_a(rf_raddr_a),
+      .rf_rdata_a(rf_rdata_a),
+      .rf_raddr_b(rf_raddr_b),
+      .rf_rdata_b(rf_rdata_b),
+      .rf_waddr(rf_waddr),
+      .rf_wdata(rf_wdata),
+      .rf_we(rf_we),
+      .alu_a(alu_a),
+      .alu_b(alu_b),
+      .alu_op(alu_op),
+      .alu_y(alu_y),
+      .step(trigger_pulse),
+      .dip_sw(dip_sw),
+      .leds(leds)
+  );
 
 endmodule

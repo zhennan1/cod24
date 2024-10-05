@@ -123,5 +123,9 @@ module lab2_top (
 
   // 低位数码管译码器
   // TODO: 例化模板中的 SEG7_LUT 模块
+  SEG7_LUT u_seg7_lut0 (
+    .iDIG(count),
+    .oSEG(dpy0)
+  );
 
 endmodule
