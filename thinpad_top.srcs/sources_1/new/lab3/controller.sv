@@ -31,6 +31,20 @@ module controller (
   logic [4:0] rd, rs1, rs2;
   logic [3:0] opcode;
 
+  initial begin
+    integer i;
+      for (i = 0; i < 16; i = i + 1) begin
+        rf_raddr_a = 5'b0;
+        rf_raddr_b = 5'b0;
+        rf_waddr = 5'b0;
+        rf_wdata = 16'b0;
+        rf_we = 0;
+        alu_a = 16'b0;
+        alu_b = 16'b0;
+        alu_op = 4'b0;
+      end
+  end
+
   always_comb begin
     is_rtype = (inst_reg[2:0] == 3'b001);
     is_itype = (inst_reg[2:0] == 3'b010);

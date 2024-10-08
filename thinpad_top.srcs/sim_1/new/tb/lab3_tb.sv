@@ -49,11 +49,11 @@ module lab3_tb;
     reset_btn = 0;
     push_btn = 0;
 
-    #1000;
+    #100;
     reset_btn = 1;
-    #1000;
+    #100;
     reset_btn = 0;
-    #10000;  // 等待复位结束
+    #2000;  // 等待复位结束
 
     // 样例：使用 POKE 指令为寄存器赋随机初值
     for (int i = 1; i < 32; i = i + 1) begin
@@ -78,6 +78,19 @@ module lab3_tb;
       opcode = $urandom_range(1, 10); // 随机选择操作码 ADD, SUB, AND, OR, etc.
       
       dip_sw = `inst_rtype(rd, rs1, rs2, opcode);
+      push_btn = 1;
+
+      #100;
+      push_btn = 0;
+
+      #1000;
+    end
+
+    // 测试 PEEK 指令
+    for (int i = 1; i < 32; i = i + 1) begin
+      #100;
+      rd = i;   // 目标寄存器
+      dip_sw = `inst_peek(rd, 16'h0);
       push_btn = 1;
 
       #100;
