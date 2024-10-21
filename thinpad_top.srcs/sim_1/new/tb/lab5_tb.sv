@@ -38,8 +38,8 @@ module lab5_tb;
   wire uart_tsre;  // 数据发送完毕标志
 
   // Windows 需要注意路径分隔符的转义，例如 "D:\\foo\\bar.bin"
-  parameter BASE_RAM_INIT_FILE = "/tmp/main.bin"; // BaseRAM 初始化文件，请修改为实际的绝对路径
-  parameter EXT_RAM_INIT_FILE = "/tmp/eram.bin";  // ExtRAM 初始化文件，请修改为实际的绝对路径
+  parameter BASE_RAM_INIT_FILE = "D:\\cod24-wanzn21\\main.bin"; // BaseRAM 初始化文件，请修改为实际的绝对路径
+  parameter EXT_RAM_INIT_FILE = "D:\\cod24-wanzn21\\eram.bin";  // ExtRAM 初始化文件，请修改为实际的绝对路径
 
   initial begin
     // 在这里可以自定义测试输入序列，例如：
@@ -62,7 +62,7 @@ module lab5_tb;
     end
 
     // 模拟 PC 通过串口，向 FPGA 发送字符
-    uart.pc_send_byte(8'h32); // ASCII '2'
+    uart.pc_send_byte(8'h65); // ASCII '2'
     #10000;
     uart.pc_send_byte(8'h33); // ASCII '3'
 
