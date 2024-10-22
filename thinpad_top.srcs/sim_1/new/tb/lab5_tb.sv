@@ -43,11 +43,11 @@ module lab5_tb;
 
   initial begin
     // 在这里可以自定义测试输入序列，例如：
-    dip_sw = 32'h2;
+    dip_sw = 32'h8000_1000;
     touch_btn = 0;
     reset_btn = 0;
     push_btn = 0;
-
+    
     #100;
     reset_btn = 1;
     #100;
@@ -61,10 +61,10 @@ module lab5_tb;
       push_btn = 0;  // 松开 push_btn 按钮
     end
 
-    // 模拟 PC 通过串口，向 FPGA 发送字符
-    uart.pc_send_byte(8'h65); // ASCII '2'
-    #10000;
-    uart.pc_send_byte(8'h33); // ASCII '3'
+    for (integer j = 0; j < 10; j = j + 1) begin
+      uart.pc_send_byte(8'h30 + j);
+      #10000;  // 发送完一个字符后等待一段时间
+    end
 
     // PC 接收到数据后，会在仿真窗口中打印出数据
 
