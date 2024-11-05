@@ -1,8 +1,8 @@
 module alu (
-    input wire [15:0] a,       // 操作数 A
-    input wire [15:0] b,       // 操作数 B
+    input wire [31:0] a,       // 操作数 A
+    input wire [31:0] b,       // 操作数 B
     input wire [3:0] op,       // 操作码，控制具体的运算类型
-    output reg [15:0] y        // 运算结果
+    output reg [31:0] y        // 运算结果
 );
 
   // 定义操作码类型
@@ -31,8 +31,8 @@ module alu (
       SLL: y = a << b[3:0];                   // 逻辑左移 B 位，取 B 的低 4 位以控制移位量
       SRL: y = a >> b[3:0];                   // 逻辑右移 B 位，取 B 的低 4 位以控制移位量
       SRA: y = $signed(a) >>> b[3:0];         // 算术右移 B 位，取 B 的低 4 位以控制移位量
-      ROL: y = (a << b[3:0]) | (a >> (16 - b[3:0])); // 循环左移 B 位
-      default: y = 16'b0;                     // 默认输出为 0
+      ROL: y = (a << b[3:0]) | (a >> (32 - b[3:0])); // 循环左移 B 位
+      default: y = 32'b0;                     // 默认输出为 0
     endcase
   end
 
