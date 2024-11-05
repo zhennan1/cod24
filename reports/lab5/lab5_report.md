@@ -10,13 +10,26 @@
 
 图1-1：指令`beq zero, zero, loop`跳转时波形图
 
+pc 从 0x80000018 正确跳转到 0x8000000c
+
 ![alt text](image-3.png)
 
 图1-2：指令`beq t0, t1, next`跳转时波形图
 
+pc 从 0x80000014 正确跳转到 0x8000001c
+
 ![alt text](image-4.png)
 
 图1-3：指令`beq t1, zero, .TESTW1`跳转时波形图
+
+pc 从 0x80000044 正确跳转到 0x8000003c
+
+上述指令译码情况：
+
+opcode[6:0] = 0x63 = 7'b1100011
+func3[2:0] = 0x0 = 3'b000
+
+均译码正确
 
 ### 2. 写入内存
 
@@ -24,17 +37,45 @@
 
 图2：指令`sw t2, 0x100(t0)`写入内存时波形图
 
+指令译码情况：
+
+opcode[6:0] = 0x23 = 7'b01000011
+func3[2:0] = 0x2 = 3'b010
+
+译码正确
+
+wb_cyc_o, wb_stb_o, wb_we_o 等 Wishbone 信号正常
+
+wb_adr_o 和 wb_dat_o 的值正确
+
+wb_ack_i 为高时，说明数据已经成功写入
+
 ### 3. 写入串口
 
 ![alt text](image-6.png)
 
 图3：指令`sb a0, 0(t0)`写入内存时波形图
 
+指令译码情况：
+
+opcode[6:0] = 0x23 = 7'b01000011
+func3[2:0] = 0x0 = 3'b000
+
+译码正确
+
+wb_cyc_o, wb_stb_o, wb_we_o 等 Wishbone 信号正常
+
+wb_dat_o 的值为 0x00000064 = 100，即'd'的ASCII码
+
+wb_adr_o 和 wb_dat_o 的值正确
+
+能够将'd'成功写入串口
+
 ## 二、实验数据
 
 ### 1. CPU 结构图
 
-
+![alt text](cpu.png)
 
 图4：CPU 结构图
 
