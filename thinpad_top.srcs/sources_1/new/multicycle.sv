@@ -72,7 +72,7 @@ module multicycle (
 
     reg [31:0] operand1_reg = 32'b0;
     reg [31:0] operand2_reg = 32'b0;
-    reg [31:0] alu_result = 32'b0;
+    reg [31:0] result = 32'b0;
     reg [31:0] rf_writeback_data = 32'b0;
 
     // Register file signals
@@ -88,7 +88,7 @@ module multicycle (
     reg [31:0] alu_operand1 = 32'b0;
     reg [31:0] alu_operand2 = 32'b0;
     reg [3:0] alu_op = ALU_ADD;
-    wire [31:0] alu_result_wire;
+    wire [31:0] alu_result;
 
     // State register
     state_t state = STATE_IF;
@@ -110,7 +110,7 @@ module multicycle (
         .a(alu_operand1),
         .b(alu_operand2),
         .op(alu_op),
-        .y(alu_result_wire)
+        .y(alu_result)
     );
 
     // Instruction fields
@@ -169,7 +169,7 @@ module multicycle (
 
                 STATE_EXE: begin
                     // Execute Stage: Perform ALU operations or calculate addresses
-                    alu_result <= alu_result_wire;
+                    result <= alu_result;
 
                     if (opcode == OPCODE_LOAD || opcode == OPCODE_STORE) begin
                         state <= STATE_MEM;
@@ -297,12 +297,12 @@ module multicycle (
                     wb_cyc_o = 1'b1;
                     wb_stb_o = 1'b1;
                     wb_we_o = 1'b0;
-                    wb_adr_o = alu_result;
+                    wb_adr_o = result;
                 end else if (opcode == OPCODE_STORE) begin // Store
                     wb_cyc_o = 1'b1;
                     wb_stb_o = 1'b1;
                     wb_we_o = 1'b1;
-                    wb_adr_o = alu_result;
+                    wb_adr_o = result;
                     wb_dat_o = operand2_reg; // Store value from rs2
                 end
             end
@@ -314,7 +314,7 @@ module multicycle (
                         // Write ALU result to rd
                         rf_we = 1'b1;
                         rf_waddr = rd;
-                        rf_wdata = alu_result;
+                        rf_wdata = result;
                     end
 
                     OPCODE_LOAD: begin // Load
@@ -325,7 +325,7 @@ module multicycle (
 
                     OPCODE_BRANCH: begin // Branch instructions
                         if (funct3 == FUNCT3_BEQ) begin // BEQ
-                            if (alu_result == 32'b0) begin
+                            if (result == 32'b0) begin
                                 // Branch taken: update PC
                                 pc_next = pc_reg + imm_B(inst_reg);
                             end
